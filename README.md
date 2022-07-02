@@ -116,6 +116,9 @@ If the Music Services Shield plugin is enabled while the Jellyfin Docker contain
 
 ## Changelog
 
+0.1.2:
+- Improve compatibility with Music Services Shield plugin
+
 0.1.1:
 - Improve robustness of (un)installation process
 - Improve fetching of server stats
