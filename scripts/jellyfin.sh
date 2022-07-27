@@ -16,13 +16,17 @@ start_service() {
   fi
   cp "${OPT_DIR}/docker-compose.yml.template" "${OPT_DIR}/docker-compose.yml"
   sed -i 's|${DOCKER_CGROUP_PARENT}|'"${CGROUP_PARENT}"'|' "${OPT_DIR}/docker-compose.yml"
+  echo_dt "Starting ${APP_NAME}"
   COMPOSE_HTTP_TIMEOUT=600 docker-compose up -d
+  echo_dt "${APP_NAME} started"
   popd > /dev/null
 }
 
 stop_service() {
   pushd "${OPT_DIR}" > /dev/null
+  echo_dt "Stopping ${APP_NAME}"
   docker-compose stop
+  echo_dt "${APP_NAME} stopped"
   popd > /dev/null
 }
 

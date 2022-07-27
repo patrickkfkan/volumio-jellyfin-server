@@ -7,7 +7,7 @@ check_root
 
 START_ON_BUILD="0";
 
-echo "Installing ${APP_NAME} ${DOCKER_IMAGE_TAG}..."
+echo_dt "Installing ${APP_NAME} ${DOCKER_IMAGE_TAG}..."
 
 # Check if container already exists
 # If so, remove it
@@ -18,20 +18,20 @@ if [ "$(docker ps -a --format '{{.Names}}' | grep ${DOCKER_CONTAINER_NAME})" ]; 
     # restart the plugin when it is updated (but then, it doesn't
     # refresh the updated plugin files, so user should still reboot)
     START_ON_BUILD="$(is_running)"
-    echo "Docker container '"${DOCKER_CONTAINER_NAME}"' already exists. Removing it first..."
+    echo_dt "Docker container '"${DOCKER_CONTAINER_NAME}"' already exists. Removing it first..."
     docker rm --force "${DOCKER_CONTAINER_NAME}"
 fi
 
 # Create docker volumes
 if [ ! -z "${DOCKER_VOLUME_NAMES}" ]; then
-    echo "Creating volumes..."
+    echo_dt "Creating volumes..."
     for VOLUME_NAME in ${DOCKER_VOLUME_NAMES[@]}; do
         docker volume create "${VOLUME_NAME}"
     done
 fi
 
 # Copy scripts
-echo "Copying scripts to ${OPT_DIR}..."
+echo_dt "Copying scripts to ${OPT_DIR}..."
 [ ! -d "${OPT_DIR}" ] && mkdir "${OPT_DIR}"
 cp install.conf "${OPT_DIR}"
 cp docker-compose.yml "${OPT_DIR}"
@@ -46,23 +46,23 @@ cp "${OPT_DIR}/docker-compose.yml" "${OPT_DIR}/docker-compose.yml.template"
 sed -i 's|${DOCKER_CGROUP_PARENT}|/|' "${OPT_DIR}/docker-compose.yml"
 
 # Pull Docker image
-echo "Pulling Docker image ${DOCKER_IMAGE_REPO}:${DOCKER_IMAGE_TAG}..."
+echo_dt "Pulling Docker image ${DOCKER_IMAGE_REPO}:${DOCKER_IMAGE_TAG}..."
 docker image pull "${DOCKER_IMAGE_REPO}:${DOCKER_IMAGE_TAG}"
 
 # Build container
-echo "Finalizing installation..."
+echo_dt "Finalizing installation..."
 cd "${OPT_DIR}"
 COMPOSE_HTTP_TIMEOUT=600 docker-compose up --no-start
 
-echo "${APP_NAME} ${DOCKER_IMAGE_TAG} installed."
+echo_dt "${APP_NAME} ${DOCKER_IMAGE_TAG} installed."
 
 CURRENT_IMAGE_ID=$(docker images "${DOCKER_IMAGE_REPO}":"${DOCKER_IMAGE_TAG}" -q)
 if [ -z "${CURRENT_IMAGE_ID}" ]; then
-    echo "Warning: failed to obtain Docker image ID for ${DOCKER_IMAGE_REPO}:${DOCKER_IMAGE_TAG}!";
+    echo_dt "Warning: failed to obtain Docker image ID for ${DOCKER_IMAGE_REPO}:${DOCKER_IMAGE_TAG}!";
 else
     REPO_OTHER_IMAGE_IDS=$(docker images "${DOCKER_IMAGE_REPO}" -q | grep -v "${CURRENT_IMAGE_ID}" || true)
     if [ ! -z "${REPO_OTHER_IMAGE_IDS}" ]; then
-        echo "The following Docker images from repo '"${DOCKER_IMAGE_REPO}"' are found and not used by the plugin. They will be removed:"
+        echo_dt "The following Docker images from repo '"${DOCKER_IMAGE_REPO}"' are found and not used by the plugin. They will be removed:"
         echo "--------------------"
         echo "$(docker image ls --format "{{.ID}}: {{.Repository}}:{{.Tag}}" "${DOCKER_IMAGE_REPO}" | grep -v "${CURRENT_IMAGE_ID}")"
         echo "--------------------"
@@ -73,6 +73,5 @@ else
 fi
 
 if [ "$START_ON_BUILD" == "1" ]; then
-    echo "Starting server..."
     ./"${OPT_MAIN_SCRIPT}" start
 fi

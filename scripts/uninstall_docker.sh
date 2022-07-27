@@ -6,11 +6,11 @@ UNINSTALLING=1
 check_root
 
 if [ $(docker images -q | wc -l) -gt 0 ]; then
-    echo "Found other Docker images. Skipping Docker uninstallation."
+    echo_dt "Found other Docker images. Skipping Docker uninstallation..."
     exit
 fi
 
-echo "Uninstalling Docker..."
+echo_dt "Uninstalling Docker..."
 apt-get remove --purge -y \
     docker-ce \
     docker-ce-cli \
@@ -22,3 +22,4 @@ apt-get remove --purge -y \
 # This will cause reinstallation to fail unless device
 # is restarted, so we stop it manually here
 systemctl stop docker.socket
+echo_dt "Docker uninstalled"
