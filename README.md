@@ -102,6 +102,12 @@ If you are thinking of configuring port forwarding on your router to direct exte
 
 ## Changelog
 
+0.1.3:
+- Remove use of Docker since container created from Jellyfin image fails to start on Raspberry Pi 4.
+- Jellyfin version installed: 10.8.3
+
+> If you are running a previous version of the plugin, please uninstall it first to remove the Docker-related files. If you simply "update" to this version, you will have files leftover from the previous version.
+
 0.1.2:
 - Improve compatibility with Music Services Shield plugin
 
