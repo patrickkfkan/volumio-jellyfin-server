@@ -102,6 +102,9 @@ If you are thinking of configuring port forwarding on your router to direct exte
 
 ## Changelog
 
+2.0.0:
+- Preliminary release for Bookworm-based, alpha-stage Volumio
+
 1.0.3:
 - Bump Jellyfin version 10.9.11
 
