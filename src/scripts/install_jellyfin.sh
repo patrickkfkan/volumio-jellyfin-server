@@ -68,7 +68,7 @@ install_ffmpeg() {
         echo_dt "Downloading jellyfin-ffmpeg package from ${FFMPEG_PKG_URL}; saving to ${PKG_TMP}..."
         wget -O "${PKG_TMP}" "${FFMPEG_PKG_URL}"
         echo_dt "Installing jellyfin-ffmpeg dependencies..."
-        apt-get update && apt-get install -y ocl-icd-libopencl1 libllvm13 libxcb-randr0
+        apt-get update && apt-get install -y ocl-icd-libopencl1 libllvm13 libllvm16 libxcb-randr0
         echo_dt "Installing jellyfin-ffmpeg..."
         dpkg -i "${PKG_TMP}"
     fi    
