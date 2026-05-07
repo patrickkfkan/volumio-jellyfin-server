@@ -102,6 +102,9 @@ If you are thinking of configuring port forwarding on your router to direct exte
 
 ## Changelog
 
+2.1.1:
+- Just some changes in TypeScript config
+
 2.1.0:
 - Bump Jellyfin version:
   - `amd64`: v10.11.8
