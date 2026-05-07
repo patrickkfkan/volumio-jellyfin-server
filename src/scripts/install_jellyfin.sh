@@ -15,11 +15,6 @@ check_url() {
 }
 
 install_pkg() {
-    if [ -d "${BIN_DIR}" ]; then
-        echo_dt "${BIN_DIR} already exists. Skipping package download and installation."
-        return 0
-    fi
-
     if [ "${ARCH}" == "armhf" ]; then
         TARGET_VERSION=$TARGET_VERSION_ARMHF
     elif [ "${ARCH}" == "amd64" ]; then
@@ -27,6 +22,13 @@ install_pkg() {
     else
         echo_dt "Installation cannot proceed: Unsupported architecture \"${ARCH}\""
         (exit 1)
+    fi
+
+    BIN_DIR="${BASE_DIR}/jellyfin_${TARGET_VERSION}"
+
+    if [ -d "${BIN_DIR}" ]; then
+        echo_dt "${BIN_DIR} already exists. Skipping package download and installation."
+        return 0
     fi
 
     echo_dt "Preparing to install Jellyfin Server v${TARGET_VERSION} for ${ARCH}..."
